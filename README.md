@@ -1,6 +1,6 @@
 <div align="center">
 
-![logo](https://github.com/carlosvpi/lemur/blob/main/docs/assets/rabbit.svg?raw=true)
+![logo](https://github.com/carlosvpi/rabbit/blob/main/docs/assets/Rabbit.svg?raw=true)
 
 _Rabbit: known for its generative prowess_
 
