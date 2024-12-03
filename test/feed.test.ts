@@ -2,17 +2,18 @@ import {describe, expect, test} from '@jest/globals';
 import { feed } from '../src/feed';
 
 describe('feed', () => {
-  test('should traverse breadth first a tree', () => {
+  test('should double the input of the feeder', () => {
     function* feeder () {
-      let i = 10
+      let i = 9
       while (i) yield i--
     }
     function* gen () {
-      let i = 0
-      let v = yield i++
-      while (v) v = yield v * 100 + i++
+      yield 20
+      let v = 9
+      while (v) v = yield 2 * v
+      yield 0
     }
     const result = feed(gen(), feeder())
-    expect([...result]).toEqual([0, 1001, 902, 803, 704, 605, 506, 407, 308, 209, 110]);
+    expect([...result]).toEqual([20, 18, 16, 14, 12, 10, 8, 6, 4, 2, 0]);
   });
 });

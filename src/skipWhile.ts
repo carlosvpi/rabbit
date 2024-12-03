@@ -5,6 +5,8 @@ export function skipWhile<T> (p: (_0: T, _1: number) => boolean) {
     while (!node.done && p(node.value, i++)) {
       node = generator.next()
     }
+    if (node.done) return
+    yield node.value
     yield* generator
   }
 }

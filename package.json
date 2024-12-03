@@ -7,8 +7,22 @@
     "/dist"
   ],
   "exports": {
-    ".": "./dist/index.js",
-    "./aStar": "./dist/src/fromArray.js"
+    "./.": "./dist/index.js",
+    "./feed": "./dist/feed.js",
+    "./feedback": "./dist/feedback.js",
+    "./filter": "./dist/filter.js",
+    "./fromArray": "./dist/fromArray.js",
+    "./head": "./dist/head.js",
+    "./headWhile": "./dist/headWhile.js",
+    "./map": "./dist/map.js",
+    "./pick": "./dist/pick.js",
+    "./pickFeed": "./dist/pickFeed.js",
+    "./pipe": "./dist/pipe.js",
+    "./range": "./dist/range.js",
+    "./reduce": "./dist/reduce.js",
+    "./skip": "./dist/skip.js",
+    "./skipWhile": "./dist/skipWhile.js",
+    "./slice": "./dist/slice.js"
   },
   "scripts": {
     "build": "tsc",
