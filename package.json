@@ -1,0 +1,35 @@
+{
+  "name": "@carlosvpi/rabbit",
+  "version": "0.0.1",
+  "description": "Utility javascript library for generators",
+  "main": "index.js",
+  "files": [
+    "/dist"
+  ],
+  "exports": {
+    ".": "./dist/index.js",
+    "./aStar": "./dist/src/fromArray.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/carlosvpi/rabbit.git"
+  },
+  "keywords": [
+    "javascript",
+    "generators"
+  ],
+  "author": "Carlos Vazquez <carlos.vazpi@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/carlosvpi/rabbit/issues"
+  },
+  "homepage": "https://github.com/carlosvpi/rabbit#readme",
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "ts-jest": "^29.2.5"
+  }
+}
