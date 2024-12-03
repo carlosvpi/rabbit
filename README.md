@@ -8,7 +8,7 @@ _Rabbit: known for its generative prowess_
 
 Utility javascript library for generators
 
-[Documentation](https://github.com/carlosvpi/lemur/blob/main/docs/documentation.md)
+[Documentation](https://github.com/carlosvpi/rabbit/blob/main/docs/documentation.md)
 
 </div>
 
