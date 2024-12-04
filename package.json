@@ -8,6 +8,7 @@
   ],
   "exports": {
     "./.": "./dist/index.js",
+    "./expand": "./dist/expand.js",
     "./feed": "./dist/feed.js",
     "./feedback": "./dist/feedback.js",
     "./filter": "./dist/filter.js",

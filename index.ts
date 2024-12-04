@@ -1,3 +1,4 @@
+export * from './src/expand'
 export * from './src/feed'
 export * from './src/feedback'
 export * from './src/filter'
