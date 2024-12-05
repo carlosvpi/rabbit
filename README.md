@@ -2,7 +2,7 @@
 
 ![logo](https://github.com/carlosvpi/rabbit/blob/main/docs/assets/Rabbit.svg?raw=true)
 
-_Rabbit: known for its generative prowess_
+_Generator utilities_
 
 # Rabbit
 

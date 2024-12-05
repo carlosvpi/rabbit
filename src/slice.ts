@@ -16,9 +16,9 @@ export function slice<T> (start: number = 0, end: number = Infinity, step: numbe
     let index = 0
     let result = generator.next()
     while (!result.done && index++ < start) {result = generator.next()}
+    index--
     while (!result.done && index++ < end) {
       yield result.value
-      result = generator.next()
       let _step = step
       while (_step--) {result = generator.next()}
     }

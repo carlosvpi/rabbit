@@ -4,7 +4,7 @@
  * @param {generator} [feeder] the feeding generator
  */
 
-export function feedback<T, I> (feeder?: Generator<I>) {
+export function feedback<T, I> (feeder: Generator<I>) {
   return function* (g: Generator<T, any, I>) {
     let gCursor: IteratorResult<T, any>
     let feedCursor: IteratorResult<I, any> | undefined = undefined
