@@ -1,16 +1,17 @@
 /**
- * `feed(g, f)` generates items `g_e` of `g` through `g.next(f_e)`, where `f_e` are items of `f` through `f.next(g_e). The first `f_e` is `undefined`, so the first `g_e` obtained with feed from `f` is its second one (with `f`'s first item)
- * @param {generator} [g] the main generator
- * @param {generator} [feed] the feeding generator
- * @see feed
+ * `feedback(feeder)(g)` => `e1 = g.next()`, `e2 = g.next(feeder.next(e1))`, `e3 = g.next(feeder.next(e2))`, ...
+ * 
+ * @param {generator} [feeder] the feeding generator
  */
 
-export function* feedback<T, I> (g: Generator<T, any, I>, feed?: Generator<I>) {
-  let gCursor: IteratorResult<T, any>
-  let feedCursor: IteratorResult<I, any> | undefined = undefined
-  do {
-    gCursor = g.next(feedCursor?.value)
-    if (!gCursor.done) yield gCursor.value
-    if (feed && !feedCursor?.done) feedCursor = feed.next(gCursor.value)
-  } while (!gCursor.done)
+export function feedback<T, I> (feeder?: Generator<I>) {
+  return function* (g: Generator<T, any, I>) {
+    let gCursor: IteratorResult<T, any>
+    let feedCursor: IteratorResult<I, any> | undefined = undefined
+    do {
+      gCursor = g.next(feedCursor?.value)
+      if (!gCursor.done) yield gCursor.value
+      if (feeder && !feedCursor?.done) feedCursor = feeder.next(gCursor.value)
+    } while (!gCursor.done)
+  }
 }

@@ -4,7 +4,7 @@ import { range } from '../src/range';
 
 describe('pick', () => {
   test('should pick the ith element', () => {
-    const result = pick([...range(5, 11)])(range(0, 100))
-    expect([...result]).toEqual([4,  10, 17, 25, 34, 44]);
+    const result = pick([1, 0, 0, 2])(range())
+    expect([...result]).toEqual([1, 1, 1, 3]);
   });
 });

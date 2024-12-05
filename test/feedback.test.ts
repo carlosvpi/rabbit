@@ -10,7 +10,7 @@ describe('feedback', () => {
         v = yield v * 10 + i++
       }
     }
-    const result = feedback(gen(), gen())
+    const result = feedback(gen())(gen())
     expect([...result]).toEqual([1, 12, 1223]);
   });
 });

@@ -13,7 +13,7 @@ describe('feed', () => {
       while (v) v = yield 2 * v
       yield 0
     }
-    const result = feed(gen(), feeder())
+    const result = feed(feeder())(gen())
     expect([...result]).toEqual([20, 18, 16, 14, 12, 10, 8, 6, 4, 2, 0]);
   });
 });

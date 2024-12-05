@@ -1,6 +1,6 @@
 {
   "name": "@carlosvpi/rabbit",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Utility javascript library for generators",
   "main": "index.js",
   "files": [
@@ -23,7 +23,9 @@
     "./reduce": "./dist/reduce.js",
     "./skip": "./dist/skip.js",
     "./skipWhile": "./dist/skipWhile.js",
-    "./slice": "./dist/slice.js"
+    "./slice": "./dist/slice.js",
+    "./step": "./dist/step.js",
+    "./tuples": "./dist/tuples.js"
   },
   "scripts": {
     "build": "tsc",

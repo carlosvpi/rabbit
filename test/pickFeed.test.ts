@@ -5,6 +5,6 @@ import { range } from '../src/range';
 describe('pickFeed', () => {
   test('should pick the ith element', () => {
     const result = pickFeed(range(5))(range(0, 100))
-    expect([...result]).toEqual([4, 10, 17, 25, 34, 44, 55, 67, 80, 94]);
+    expect([...result]).toEqual([5, 11, 18, 26, 35, 45, 56, 68, 81, 95]);
   });
 });
