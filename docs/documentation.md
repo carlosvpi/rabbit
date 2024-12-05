@@ -1,5 +1,17 @@
 ## Functions
 
+### append
+
+```typescript
+function append<T, I> (object: Generator<I>): (g: Generator<T, any, I>) => Generator<T, any, I>
+```
+
+`append(g1)(g2)` generates, first, all items from `g2`, and then all items from `g1`
+
+**Example**
+
+`append(range(5))(range(0, 5))` generates `0, 1, 2, 3, 4, 5, 6, 7, 8, 9, ...`
+
 ### feed
 
 ```typescript
@@ -136,6 +148,18 @@ function pipe<N>(...constructors: ((_: Generator<N>) => Generator<N>)[]): (gener
 **Example**
 
 `pipe(skip(5), head(10), filter(x => x % 2 === 0))(range())` generates 6, 8, 10, 12, 14
+
+### prepend
+
+```typescript
+function prepend<T, I> (object: Generator<I>): (g: Generator<T, any, I>) => Generator<T, any, I>
+```
+
+`prepend(g1)(g2)` generates, first, all items from `g1`, and then all items from `g2`
+
+**Example**
+
+`prepend(range(0, 5))(range(5))` generates `0, 1, 2, 3, 4, 5, 6, 7, 8, 9, ...`
 
 ### range
 
