@@ -1,6 +1,6 @@
 {
   "name": "@carlosvpi/rabbit",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Utility javascript library for generators",
   "main": "index.js",
   "files": [
