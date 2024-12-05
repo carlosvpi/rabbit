@@ -9,6 +9,6 @@ describe('reduce', () => {
   });
   test('should reduce the odd elements, when default is not given', () => {
     const result = reduce((acc: number, x: number) => acc + x)(range(0, 10))
-    expect([...result]).toEqual([1,  3,  6, 10, 15, 21, 28, 36, 45]);
+    expect([...result]).toEqual([0, 1,  3,  6, 10, 15, 21, 28, 36, 45]);
   });
 });
