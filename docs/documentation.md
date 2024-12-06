@@ -199,6 +199,18 @@ function runningTuples<T> (size: number = 1): (g: Generator<T>) => Generator<T>
 
 `runningTuples(3)(range())` generates [0, 1, 2], [1, 2, 3], [2, 3, 4], [3, 4, 5], ...
 
+### sequence
+
+```typescript
+function* sequence<T> (f: (..._: T[]) => T, ...initialValues: T[])
+```
+
+`sequence(f, ...initialValues)` generates, first, the initial values and, after, the values produced by the function f over the last values generated
+
+**Example**
+
+`sequence((a, b) => a + b, 1, 1)` generates the fibonacci sequence
+
 ### skip
 
 ```typescript
