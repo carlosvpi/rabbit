@@ -4,7 +4,7 @@
  * @param {generator} [g1] the generator to prepend
  */
 
-export function prepend<T, I> (object: Generator<T>) {
+export function prepend<T> (object: Generator<T>) {
   return function* (g: Generator<T>) {
     yield* object
     yield* g
