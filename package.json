@@ -1,6 +1,6 @@
 {
   "name": "@carlosvpi/rabbit",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "Utility javascript library for generators",
   "main": "index.js",
   "files": [
@@ -13,6 +13,7 @@
     "./feedback": "./dist/src/feedback.js",
     "./feedMap": "./dist/src/feedMap.js",
     "./filter": "./dist/src/filter.js",
+    "./find": "./dist/src/find.js",
     "./flatMap": "./dist/src/flatMap.js",
     "./fromArray": "./dist/src/fromArray.js",
     "./head": "./dist/src/head.js",

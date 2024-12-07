@@ -75,6 +75,18 @@ function filter<T> (p: (_0: T, _1: number) => boolean): (g: Generator<T>) => Gen
 
 `filter(p)` takes a generator `g` and generates items `e` of `g` such that `p(e, i) === true`, with `i` the index of `e` on `g`.
 
+### find
+
+```typescript
+function find<T, U> (p: (_0: T, _1: number) => boolean): (g: Generator<T>) => T | null
+```
+
+`find(p)(g)` finds the item in `g` that fulfils `p` (if none does, returns `null`)
+
+**Example**
+
+`find(x => x%5 === 4)(range(0, 5))` returns 4
+
 ### flatMap
 
 ```typescript
