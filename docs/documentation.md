@@ -249,6 +249,29 @@ function slice<T> (start: number = 0, end: number = Infinity, step: number = 1):
 
 `slice(5, 10, 2)(range())` generates 5, 7, 9
 
+### sortInsert
+
+```typescript
+function sortInsert<T> (item: T, sort: (_0: T, _1: T) => number): (g: Generator<T>) => Generator<T>
+```
+
+if `g` is a sorted generator (according to `sort`), then `sortInsert(item, sort)(g)` generates the items of `g` including `item` following order given by `sort`.
+
+**Example**
+
+`sortInsert(5, (a, b) => a - b)(range(0, 10, 2))` generates 0, 2, 4, 5, 6, 8
+
+### sortMerge
+
+```typescript
+function sortMerge<T> (h: Generator<T>, sort: (_0: T, _1: T) => number): (g: Generator<T>) => Generator<T>
+```
+if `g` and `h` are sorted generators (according to `sort`), then `sortMerge(h, sort)(g)` generates the items of `g` and `h` following order given by `sort`.
+
+**Example**
+
+`sortMerge(range(0, 10, 2), (a, b) => a - b)(range(1, 11, 2))` gives 0, 1, 2, 3, 4, 5, 6, 7, 8, 9
+
 ### step
 
 ```typescript
