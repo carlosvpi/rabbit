@@ -4,8 +4,8 @@
  * @param {generator} [g1] the generator to append
  */
 
-export function append<T, I> (object: Generator<I>) {
-  return function* (g: Generator<T, any, I>) {
+export function append<T> (object: Generator<T>) {
+  return function* (g: Generator<T>) {
     yield* g
     yield* object
   }
