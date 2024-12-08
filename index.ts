@@ -1,4 +1,5 @@
 export * from './src/append'
+export * from './src/copies'
 export * from './src/feed'
 export * from './src/feedback'
 export * from './src/feedMap'

@@ -12,6 +12,18 @@ function append<T, I> (object: Generator<I>): (g: Generator<T, any, I>) => Gener
 
 `append(range(5))(range(0, 5))` generates `0, 1, 2, 3, 4, 5, 6, 7, 8, 9, ...`
 
+### copies
+
+```typescript
+export function copies<T> (n: number): (g: Generator<T>) => Generator<T>[]
+```
+
+`copies(n)(g)` creates `n` independent copies of g. 
+
+**Example**
+
+If `[c1, c2] = copies(2)(range())`, then we can consume all elements of c1 (thus consuming g) without consuming the elements of c2.
+
 ### feed
 
 ```typescript
