@@ -131,6 +131,22 @@ function map<T, U> (f: (_0: T, _1: number) => U): (g: Generator<T>) => Generator
 
 `map(f)` takes a generator `g` and generates for each `e` of `g`, the value `f(e, i)`, with `i` the index of `e` on `g`.
 
+### mixAll
+
+```typescript
+function* mixAll<T, I> (...gs: Generator<T, any, I | undefined>[]): Generator<T, any, I>
+```
+
+`mixAll(g1, ..., gn)` generates items `[e1, ..., en]` where `ei` is an item of `gi` until the last one of them finishes
+
+### mixRace
+
+```typescript
+function* mixRace<T, I> (...gs: Generator<T, any, I | undefined>[]): Generator<T, any, I>
+```
+
+`mixRace(g1, ..., gn)` generates items `[e1, ..., en]` where `ei` is an item of `gi` until the first one of them finishes
+
 ### pick
 
 ```typescript

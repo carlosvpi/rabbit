@@ -1,6 +1,6 @@
 {
   "name": "@carlosvpi/rabbit",
-  "version": "0.0.11",
+  "version": "0.0.12",
   "description": "Utility javascript library for generators",
   "main": "index.js",
   "files": [
@@ -19,11 +19,13 @@
     "./head": "./dist/src/head.js",
     "./headWhile": "./dist/src/headWhile.js",
     "./map": "./dist/src/map.js",
+    "./mixAll": "./dist/src/mixAll.js",
+    "./mixRace": "./dist/src/mixRace.js",
     "./pick": "./dist/src/pick.js",
     "./pickFeed": "./dist/src/pickFeed.js",
     "./pipe": "./dist/src/pipe.js",
     "./prepend": "./dist/src/prepend.js",
-    "./range": "./dist/src/range.js",
+    "./rmnge": "./dist/src/range.js",
     "./reduce": "./dist/src/reduce.js",
     "./runningTuples": "./dist/src/runningTuples.js",
     "./sequence": "./dist/src/sequence.js",
