@@ -324,6 +324,26 @@ function step<T> (distance: number = 1): (g: Generator<T>) => Generator<T>
 
 `step(5)(range())` generates 0, 5, 10, 15...
 
+### tagFeed
+
+```typescript
+function* tagFeed<T, I = T>(g: Generator<T, any, I>): Generator<(T | undefined)[], any, I>
+```
+ 
+`tagFeed(g)` returns the items of `g`, together with the input used to generate them
+
+**Example**
+
+`tagFeed(feed(range(0, 10))(feedMap(x => x * 2, 0)))`
+
+### tap
+
+```typescript
+function tap<T> (f: (_0: T, _1: number) => any): (g: Generator<T>) => Generator<T>
+```
+ 
+`tap(f)(g)` applies `f(e)` where `e` are items of `g`, and generates `e` unchanged
+
 ### tuples
 
 ```typescript

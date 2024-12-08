@@ -1,6 +1,6 @@
 {
   "name": "@carlosvpi/rabbit",
-  "version": "0.0.14",
+  "version": "0.0.15",
   "description": "Utility javascript library for generators",
   "main": "index.js",
   "files": [
@@ -36,6 +36,8 @@
     "./sortInsert": "./dist/src/sortInsert.js",
     "./sortMerge": "./dist/src/sortMerge.js",
     "./step": "./dist/src/step.js",
+    "./tap": "./dist/src/tap.js",
+    "./tagFeed": "./dist/src/tagFeed.js",
     "./tuples": "./dist/src/tuples.js"
   },
   "scripts": {

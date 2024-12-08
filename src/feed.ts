@@ -6,7 +6,7 @@
  * @param {generator} [feeder] the feeding generator
  */
 
-export function feed<T, I> (feeder?: Generator<I>) {
+export function feed<T, I> (feeder: Generator<I>) {
   return function* (g: Generator<T, any, I>) {
     let gCursor: IteratorResult<T, any>
     let feedCursor: IteratorResult<I, any> | undefined = undefined
@@ -14,6 +14,6 @@ export function feed<T, I> (feeder?: Generator<I>) {
       gCursor = g.next(feedCursor?.value)
       if (!gCursor.done) yield gCursor.value
       if (feeder && !feedCursor?.done) feedCursor = feeder.next()
-    } while (!gCursor.done && !feedCursor.done)
+    } while (!gCursor.done && !feedCursor?.done)
   }
 }
