@@ -2,21 +2,32 @@ import {describe, expect, test} from '@jest/globals';
 import { head } from '../src/head';
 import { feedback } from '../src/feedback';
 import { feedMap } from '../src/feedMap';
+import { returning } from '../src/returning';
+import { yieldReturnValue } from '../src/yieldReturnValue';
 
 describe('feedback', () => {
-  test('should feedback a custom generator', () => {
-    function* gen () {
-      let i = 1
-      let v = yield i++
-      while (v>0 && v<1000) {
-        v = yield v * 10 + i++
-      }
-    }
-    const result = feedback(gen())(gen())
-    expect([...result]).toEqual([1, 12, 1223]);
+  test('should feedback a generator', () => {
+    const gen = feedMap<number,number>((x: number) => x * 2, 0)
+    const feeder = feedMap<number,number>((x: number) => x + 1, 10)
+    const result = head(10)(feedback(feeder)(gen))
+    expect([...result]).toEqual([0, 22, 46, 94, 190, 382, 766, 1534, 3070, 6142]);
   });
-  test('should feedback a feedMap generator', () => {
-    const result = head(10)(feedback(feedMap(x => 2 * x, 0))(feedMap(x => 1 + x, 0)))
-    expect([...result]).toEqual([1, 1, 3, 7, 15, 31, 63, 127, 255, 511]);
+  test('should feedback a generator and return [v, null] when the generator returns v', () => {
+    const gen = head<number, number, number>(10)(feedMap<number,number>((x: number) => x * 2, 0))
+    const feeder = feedMap<number,number>((x: number) => x + 1, 10)
+    const result = yieldReturnValue(feedback(feeder)(returning<number>(-1)(gen)))
+    expect([...result]).toEqual([0, 22, 46, 94, 190, 382, 766, 1534, 3070, 6142, [-1, null]]);
+  });
+  test('should feedback a generator and return [null, w] when the feeder returns w', () => {
+    const gen = feedMap<number,number>((x: number) => x * 2, 0)
+    const feeder = head<number, number, number>(9)(feedMap<number,number>((x: number) => x + 1, 10))
+    const result = yieldReturnValue(feedback(returning<number>(-2)(feeder))(gen))
+    expect([...result]).toEqual([0, 22, 46, 94, 190, 382, 766, 1534, 3070, 6142, [null, -2]]);
+  });
+  test('should feedback a generator and return [null, w] when the feeder returns w', () => {
+    const gen = head<number, number, number>(10)(feedMap<number,number>((x: number) => x * 2, 0))
+    const feeder = head<number, number, number>(10)(feedMap<number,number>((x: number) => x + 1, 10))
+    const result = yieldReturnValue(feedback(returning<number>(-2)(feeder))(returning<number>(-1)(gen)))
+    expect([...result]).toEqual([0, 22, 46, 94, 190, 382, 766, 1534, 3070, 6142, [-1, -2]]);
   });
 });

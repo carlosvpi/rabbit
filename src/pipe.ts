@@ -5,8 +5,8 @@
  * @param {Array} [constructors] The generator constructors
  */
 
-export function pipe<N>(...constructors: ((_: Generator<N>) => Generator<N>)[]) {
-  return function(generator: Generator<N>) {
+export function pipe<T>(...constructors: ((_: Generator<T>) => Generator<T>)[]) {
+  return function(generator: Generator<T>) {
     for (let constructor of constructors) {
       generator = constructor(generator)
     }

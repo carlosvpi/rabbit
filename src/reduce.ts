@@ -1,5 +1,5 @@
 /**
- * `reduce(f, dflt)(g)` generates items `r[i] = f(r[i-1], e)`, and `r[0] = d`
+ * `reduce(f, dflt)(g)` generates items `r[i] = f(r[i-1], e)`, and `r[0] = d` and returns the return value of `g`
  * 
  * **Example** `reduce((acc, x) => acc + x, 0)(range(0, 5))` generates 0, 1, 3, 6, 10
  * @param {function} [f] The function to apply to combine elements of `g`
@@ -7,18 +7,14 @@
  */
 
 
-export function reduce<T, U> (f: (_0: U, _1: T, _2: number) => U, u?: U) {
-  return function* (generator: Generator<T>): Generator<U> {
-    let result: IteratorResult<T>
+export function reduce<T, U = T, TReturn = any, TNext = any> (f: (_0: U, _1: T, _2: number, _3: TNext) => U, u: U) {
+  return function* (g: Generator<T, TReturn, TNext>): Generator<U, TReturn, TNext> {
+    let next: TNext
+    let iterator: IteratorResult<T, TReturn>
     let i = 0
-    if (u === undefined) {
-      result = generator.next()
-      u = result.value
-      if (result.done) return u
-      yield u
+    while (!(iterator = g.next(next)).done) {
+      next = yield u = f(u, iterator.value as T, i++, next)
     }
-    for (let item of generator) {
-      yield u = f(u, item, i++)
-    }
+    return iterator.value
   }
 }

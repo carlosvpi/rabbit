@@ -5,22 +5,17 @@
  * 
  * **Example** `slice(5, 10, 2)(range())` generates 5, 7, 9
  * 
- * `slice(start, end, step)(g)` ~~ `pipe(g, skip(start), head(end - start), step(step))`
+ * `slice(start, end, step, returnValue)(g)` ~~ `pipe(skip(start), head(end - start, returnValue), step(step))(g)`
  * @param {number} [start=0] The index on `g` of the first item of `g` to generate
  * @param {number} [end=Infinity] The index on `g` of the first item of `g` to not generate
  * @param {number} [step=1] The distance in two consecutive indexes on `g` to generate
  */
 
-export function slice<T> (start: number = 0, end: number = Infinity, step: number = 1) {
-  return function* (generator: Generator<T>): Generator<T> {
-    let index = 0
-    let result = generator.next()
-    while (!result.done && index++ < start) {result = generator.next()}
-    index--
-    while (!result.done && index++ < end) {
-      yield result.value
-      let _step = step
-      while (_step--) {result = generator.next()}
-    }
-  }
+import { head } from './head'
+import { skip } from './skip'
+import { step as stepF } from './step'
+import { pipe } from './pipe'
+
+export function slice<T, TReturn = any, TNext = any> (start: number = 0, end: number = Infinity, step: number = 1, returnValue?: TReturn): (_: Generator<T, TReturn, TNext>) => Generator<T, TReturn, TNext> {
+  return pipe(skip(start), head(end - start), stepF(step, returnValue))
 }

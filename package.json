@@ -1,6 +1,6 @@
 {
   "name": "@carlosvpi/rabbit",
-  "version": "0.0.16",
+  "version": "0.0.17",
   "description": "Utility javascript library for generators",
   "main": "index.js",
   "files": [
@@ -9,6 +9,7 @@
   "exports": {
     "./.": "./dist/index.js",
     "./append": "./dist/src/append.js",
+    "./chunks": "./dist/src/chunks.js",
     "./copies": "./dist/src/copies.js",
     "./feed": "./dist/src/feed.js",
     "./feedback": "./dist/src/feedback.js",
@@ -19,16 +20,17 @@
     "./fromArray": "./dist/src/fromArray.js",
     "./head": "./dist/src/head.js",
     "./headWhile": "./dist/src/headWhile.js",
+    "./last": "./dist/src/last.js",
     "./map": "./dist/src/map.js",
     "./mixAll": "./dist/src/mixAll.js",
     "./mixRace": "./dist/src/mixRace.js",
     "./pick": "./dist/src/pick.js",
-    "./pickFeed": "./dist/src/pickFeed.js",
     "./pipe": "./dist/src/pipe.js",
     "./prepend": "./dist/src/prepend.js",
     "./range": "./dist/src/range.js",
     "./reduce": "./dist/src/reduce.js",
-    "./runningTuples": "./dist/src/runningTuples.js",
+    "./returning": "./dist/src/returning.js",
+    "./returningMap": "./dist/src/returningMap.js",
     "./sequence": "./dist/src/sequence.js",
     "./skip": "./dist/src/skip.js",
     "./skipWhile": "./dist/src/skipWhile.js",
@@ -36,9 +38,10 @@
     "./sortInsert": "./dist/src/sortInsert.js",
     "./sortMerge": "./dist/src/sortMerge.js",
     "./step": "./dist/src/step.js",
-    "./tap": "./dist/src/tap.js",
     "./tagFeed": "./dist/src/tagFeed.js",
-    "./tuples": "./dist/src/tuples.js"
+    "./tap": "./dist/src/tap.js",
+    "./toAsync": "./dist/src/toAsync.js",
+    "./yieldReturnValue": "./dist/src/yieldReturnValue.js"
   },
   "scripts": {
     "build": "tsc",
