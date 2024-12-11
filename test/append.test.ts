@@ -1,6 +1,6 @@
 import {describe, expect, test} from '@jest/globals';
 import { append } from '../src/append';
-import { feed, FeedReturn } from '../src/feed';
+import { feed } from '../src/feed';
 import { feedMap } from '../src/feedMap';
 import { range } from '../src/range';
 import { head } from '../src/head';

@@ -1,6 +1,6 @@
 {
   "name": "@carlosvpi/rabbit",
-  "version": "0.0.17",
+  "version": "0.0.18",
   "description": "Utility javascript library for generators",
   "main": "index.js",
   "files": [
@@ -10,7 +10,7 @@
     "./.": "./dist/index.js",
     "./append": "./dist/src/append.js",
     "./chunks": "./dist/src/chunks.js",
-    "./copies": "./dist/src/copies.js",
+    "./every": "./dist/src/every.js",
     "./feed": "./dist/src/feed.js",
     "./feedback": "./dist/src/feedback.js",
     "./feedMap": "./dist/src/feedMap.js",
@@ -24,6 +24,7 @@
     "./map": "./dist/src/map.js",
     "./mixAll": "./dist/src/mixAll.js",
     "./mixRace": "./dist/src/mixRace.js",
+    "./multicast": "./dist/src/multicast.js",
     "./pick": "./dist/src/pick.js",
     "./pipe": "./dist/src/pipe.js",
     "./prepend": "./dist/src/prepend.js",
@@ -35,6 +36,7 @@
     "./skip": "./dist/src/skip.js",
     "./skipWhile": "./dist/src/skipWhile.js",
     "./slice": "./dist/src/slice.js",
+    "./some": "./dist/src/some.js",
     "./sortInsert": "./dist/src/sortInsert.js",
     "./sortMerge": "./dist/src/sortMerge.js",
     "./step": "./dist/src/step.js",
@@ -53,6 +55,8 @@
   },
   "keywords": [
     "javascript",
+    "typescript",
+    "util",
     "generators"
   ],
   "author": "Carlos Vazquez <carlos.vazpi@gmail.com>",

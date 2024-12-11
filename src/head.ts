@@ -9,7 +9,7 @@
  */
 
 export function head<T, TReturn = any, TNext = any> (n: number = 1, returnValue?: TReturn) {
-  return function* (g: Generator<T, TReturn, TNext>): Generator<T, TReturn | null, TNext> {
+  return function* (g: Generator<T, TReturn, TNext>): Generator<T, TReturn, TNext> {
     let next: TNext
     let i: IteratorResult<T, TReturn>
     while (n-- && !(i = g.next(next)).done) {

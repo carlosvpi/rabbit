@@ -14,6 +14,8 @@ Utility javascript library for generators
 
 ## Install
 
+Install @carlosvpi/rabbit:
+
 ```bash
 npm install @carlosvpi/rabbit
 ```
@@ -22,6 +24,12 @@ or
 
 ```bash
 yarn add @carlosvpi/rabbit
+```
+
+@carlosvpi/rabbit is ready to be tree-shaken. In order to only use a specific function (for example, `head`), you can import like so:
+
+```typescript
+import { head } from '@carlosvpi/rabbit/head'
 ```
 
 ## Examples

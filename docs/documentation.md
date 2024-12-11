@@ -1,4 +1,4 @@
-## Functions
+## Operators
 
 ### append
 
@@ -29,21 +29,17 @@ For each item of a chunk, `g` is invoked with the same `next` value.
 
 `chunks(3)(range())` generates `[0, 1, 2]`, `[3, 4, 5]`, `[6, 7, 8]`, ...
 
-### copies
+### every
 
 ```typescript
-export function copies<T, TReturn = any> (n: number): (g: Generator<T, TReturn>) => Generator<T, TReturn>[]
+function every<T, TReturn = any, TNext = any> (p: (_0: T, _1: number, _2: TNext) => boolean): (g: Generator<T, TReturn, TNext>) => Generator<boolean, T | null, TNext>
 ```
 
-`copies(n)(g)` creates `n` independent copies of g. 
+`every(p)(g)` generates true until an element of `g` no longer satisfies a predicate, in which case it generates false.
 
-`g` is required to not have a type of `next`.
+It returns the value that did not fulfil `p`, if some, or `null`.
 
-The return value of each copy is the same as that of the original generator `g`.
-
-**Example**
-
-If `[c1, c2] = copies(2)(range())`, then we can consume all elements of c1 (thus consuming g) without consuming the elements of c2.
+`every` does not apply `p` to the return value of `g`.
 
 ### feed
 
@@ -232,6 +228,22 @@ When one or more generators `gi` return `vi`, `mixRace(g1, ..., gn)` returns an 
 
 * `mixRace (fromArray(['a', 'b', 'c'], 200), range(0, 4, 1, 100))` generates `['a', 0]`, `['b', 1]`, `['c', 2]` and returns `[200, undefined]`
 
+### multicast
+
+```typescript
+export function multicast<T, TReturn = any> (n: number): (g: Generator<T, TReturn>) => Generator<T, TReturn>[]
+```
+
+`multicast(n)(g)` creates `n` independent copies of g. 
+
+`g` is required to not have a type of `next`.
+
+The return value of each copy is the same as that of the original generator `g`.
+
+**Example**
+
+If `[c1, c2] = multicast(2)(range())`, then we can consume all elements of c1 (thus consuming g) without consuming the elements of c2.
+
 ### pick
 
 ```typescript
@@ -371,6 +383,18 @@ function slice<T, TReturn = any, TNext = any> (start: number = 0, end: number = 
 
 * `slice(5, 10)(range())` generates 5, 6, 7, 8, 9
 * `slice(5, 10, 2)(range())` generates 5, 7, 9
+
+### some
+
+```typescript
+function some<T, TReturn = any, TNext = any> (p: (_0: T, _1: number, _2: TNext) => boolean): (g: Generator<T, TReturn, TNext>) => Generator<boolean, T | null, TNext>
+```
+
+`some(p)(g)` generates false until an element of `g` satisfies a predicate, in which case it generates true.
+
+It returns the value that fulfilled `p`, if some did, or `null`.
+
+`some` does not apply `p` to the return value of `g`.
 
 ### sortInsert
 
