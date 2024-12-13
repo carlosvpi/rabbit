@@ -1,6 +1,6 @@
 {
   "name": "@carlosvpi/rabbit",
-  "version": "0.0.19",
+  "version": "1.0.0",
   "description": "Utility javascript library for generators",
   "main": "index.js",
   "files": [
@@ -100,7 +100,8 @@
     "javascript",
     "typescript",
     "util",
-    "generators"
+    "generators",
+    "asynchronous"
   ],
   "author": "Carlos Vazquez <carlos.vazpi@gmail.com>",
   "license": "MIT",

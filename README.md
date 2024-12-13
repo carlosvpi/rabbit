@@ -6,11 +6,49 @@ _Generator utilities_
 
 # Rabbit
 
-Utility javascript library for generators
+Utility javascript library for generators and asynchronous generators
 
 [Documentation](https://github.com/carlosvpi/rabbit/blob/main/docs/documentation.md)
 
 </div>
+
+@carlosvpi/rabbit provides a large number of operators to work with generators (both synchronous and asynchronous), extending the native set of generator methods.
+
+It provides useful `pipe` operator to apply as many transformations as needed to your generators.
+
+For example, it can compute the variance of Math.random()
+
+```typescript
+toArray(                            
+  pipe(
+    last(2),                        // get, together with an item, the previous one
+    drop(1),                        // ignore the first item
+    map(([a, b]) => (a - b)**2),    // compute the square of the difference
+    reduce((a, b) => a + b, 0),     // compute the sum
+    take(100),                      // take 100 items
+  )(sequence(() => Math.random()))  // produce random numbers
+).at(-1)
+```
+
+It can also mimic reactive programming by the use of `multicast` 
+
+```typescript
+const clicks = fromEvent(button, 'click')   // clicks emits each click
+const multicasted = multicastAsync(clicks)  // multicast clicks
+
+// One part of the app counts the clicks
+const count = map((_, i) => i)(multicasted.next())
+
+// Another part of the app fetches a url on every click
+const data = asyncPipe(
+  throttle(300),                          // Throttles the events 300ms 
+  tap(setLoader),                         // set up a loader
+  asyncMap(() => fetch('url')),           // retrieve a response
+  asyncMap(response => response.json())   // retrieve data (this is the result of the generator)
+  tap(removeLoader),                      // remove the loader
+  asyncTryCatch(recovery)                 // recover from errors
+)(multicasted.next())                     // get a view on `clicks`
+```
 
 ## Install
 
@@ -32,7 +70,7 @@ yarn add @carlosvpi/rabbit
 import { take } from '@carlosvpi/rabbit/take'
 ```
 
-## Examples
+## Example
 
 This gives us the fibonacci sequence
 
