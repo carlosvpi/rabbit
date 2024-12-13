@@ -3,7 +3,7 @@ import { returningMap } from '../src/returningMap';
 import { range } from '../src/range';
 import { pipe } from '../src/pipe';
 import { feed } from '../src/feed';
-import { head } from '../src/head';
+import { take } from '../src/take';
 import { feedMap } from '../src/feedMap';
 import { yieldReturnValue } from '../src/yieldReturnValue';
 
@@ -18,7 +18,7 @@ describe('returningMap', () => {
   });
   test('should pass down the `next` values, and take into account the length and the `next` values', () => {
     const result = pipe(
-      head(5, 10),
+      take(5, 10),
       returningMap((returnValue, index, next) => 2**returnValue + 3**index + 5**next),
       feed(range(1)),
       yieldReturnValue,

@@ -26,10 +26,10 @@ or
 yarn add @carlosvpi/rabbit
 ```
 
-@carlosvpi/rabbit is ready to be tree-shaken. In order to only use a specific function (for example, `head`), you can import like so:
+@carlosvpi/rabbit is ready to be tree-shaken. In order to only use a specific function (for example, `take`), you can import like so:
 
 ```typescript
-import { head } from '@carlosvpi/rabbit/head'
+import { take } from '@carlosvpi/rabbit/take'
 ```
 
 ## Examples
@@ -45,7 +45,7 @@ sequence((a, b) => a + b, 1, 1)
 As is, the sequence is inifinite, so let's take only the 10 first items
 
 ```typescript
-[...head(10)(sequence((a, b) => a + b, 1, 1))]
+[...take(10)(sequence((a, b) => a + b, 1, 1))]
 
 => [1, 1, 2, 3, 5, 8, 13, 21, 34, 55]
 ```
@@ -53,7 +53,7 @@ As is, the sequence is inifinite, so let's take only the 10 first items
 Now let's group them in tuples of 2 consecutive items
 
 ```typescript
-[...runningTuples(2)(head(10)(sequence((a, b) => a + b, 1, 1)))]
+[...runningTuples(2)(take(10)(sequence((a, b) => a + b, 1, 1)))]
 
 => [
   [ 1, 1 ], [ 1, 2 ],
@@ -68,7 +68,7 @@ That is a bit cumbersome to write. We can do the same `pipe`:
 
 ```typescript
 [...pipe(
-  head(10),
+  take(10),
   runningTuples(2)
 )(sequence((a, b) => a + b, 1, 1))]
 
@@ -84,7 +84,7 @@ That is a bit cumbersome to write. We can do the same `pipe`:
 Let's divide the items in the tuples to find the ratio of each two consecutive elements in the sequence
 ```typescript
 [...pipe(
-  head(10),
+  take(10),
   runningTuples(2),
   map(([a, b]) => b / a)
 )(sequence((a, b) => a + b, 1, 1))]

@@ -1,7 +1,7 @@
 import {describe, expect, test} from '@jest/globals';
 import { feed } from '../src/feed';
 import { range } from '../src/range';
-import { head } from '../src/head';
+import { take } from '../src/take';
 import { returning } from '../src/returning';
 import { yieldReturnValue } from '../src/yieldReturnValue';
 import { feedMap } from '../src/feedMap';
@@ -16,7 +16,7 @@ describe('feed', () => {
   });
   test('should return [v, null] if the generator ends first with v', () => {
     const gen = pipe(
-      head(4),
+      take(4),
       returning(100)
     )(feedMap(x => 2 * x, 10))
     const result = pipe(
@@ -27,7 +27,7 @@ describe('feed', () => {
   });
   test('should return [null, v] if the feeder ends first with v', () => {
     const feeder = pipe(
-      head(4),
+      take(4),
       returning(200)
     )(range(9, -1))
     const result = pipe(
@@ -38,11 +38,11 @@ describe('feed', () => {
   });
   test('should return [v, w] if the generator ends in v and the feeder with w', () => {
     const gen = pipe(
-      head(4),
+      take(4),
       returning(100)
     )(feedMap(x => 2 * x, 10))
     const feeder = pipe(
-      head(4),
+      take(4),
       returning(200)
     )(range(9, -1))
     const result = pipe(

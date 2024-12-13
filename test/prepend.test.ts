@@ -3,7 +3,7 @@ import { prepend } from '../src/prepend';
 import { feed } from '../src/feed';
 import { feedMap } from '../src/feedMap';
 import { range } from '../src/range';
-import { head } from '../src/head';
+import { take } from '../src/take';
 import { yieldReturnValue } from '../src/yieldReturnValue';
 
 describe('prepend', () => {
@@ -13,7 +13,7 @@ describe('prepend', () => {
   });
   test('should prepend 5 elements to our generator, passing down the "next" values introduced', () => {
     // fed is the first 5 items of a feedMap
-    const fed = head<number>(5)(feedMap<number, number>((x:number) => 100 - x, 0))
+    const fed = take<number>(5)(feedMap<number, number>((x:number) => 100 - x, 0))
     // We prepend another feedMap
     const appended = prepend<number>(fed)(feedMap<number, number>((x:number) => x, 5))
     // We feed the result the range 1 to 10. They go to "fed" (which is only 5 items long) and, then, to the appended feedMap

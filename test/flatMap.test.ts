@@ -3,7 +3,7 @@ import { flatMap } from '../src/flatMap';
 import { range } from '../src/range';
 import { pipe } from '../src/pipe';
 import { feedMap } from '../src/feedMap';
-import { head } from '../src/head';
+import { take } from '../src/take';
 import { feed } from '../src/feed';
 import { returning } from '../src/returning';
 import { yieldReturnValue } from '../src/yieldReturnValue';
@@ -17,7 +17,7 @@ describe('flatMap', () => {
     const result = pipe(
       feed(range(2, 10)),
       flatMap((x: number) => range(0, x)),
-      head<number>(16),
+      take<number>(16),
     )(feedMap<number, number>((x: number) => x * 2, 1))
     expect([...result]).toEqual([0, 1, 0, 1, 2, 3, 0, 1, 2, 3, 4, 5, 0, 1, 2, 3]);
   });

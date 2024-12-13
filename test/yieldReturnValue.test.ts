@@ -1,5 +1,5 @@
 import {describe, expect, test} from '@jest/globals';
-import { head } from '../src/head';
+import { take } from '../src/take';
 import { range } from '../src/range';
 import { feed } from '../src/feed';
 import { feedMap } from '../src/feedMap';
@@ -11,7 +11,7 @@ describe('tap', () => {
     expect([...result]).toEqual([0, 1, 2, 3, 4, 100]);
   });
   test('should pass down the next values', () => {
-    const result = feed(range(1))(yieldReturnValue(head(5, 100)(feedMap((x: number) => x * 2, 0))))
+    const result = feed(range(1))(yieldReturnValue(take(5, 100)(feedMap((x: number) => x * 2, 0))))
     expect([...result]).toEqual([0, 2, 4, 6, 8, 100]);
   });
 });

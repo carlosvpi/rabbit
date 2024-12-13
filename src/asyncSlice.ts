@@ -1,0 +1,21 @@
+/**
+ * `asyncSlice(start, end, step)(g)` gets items indexed `i` on `g`, where 0 <= `start` <= `i` < `end`, and if `i` is an index, the next index is `i + step`.
+ * 
+ * **Example** `asyncSlice(5, 10)(range())` generates 5, 6, 7, 8, 9
+ * 
+ * **Example** `asyncSlice(5, 10, 2)(range())` generates 5, 7, 9
+ * 
+ * `asyncSlice(start, end, step, returnValue)(g)` ~~ `asyncPipe(asyncDrop(start), asyncTake(end - start, returnValue), step(step))(g)`
+ * @param {number} [start=0] The index on `g` of the first item of `g` to generate
+ * @param {number} [end=Infinity] The index on `g` of the first item of `g` to not generate
+ * @param {number} [step=1] The distance in two consecutive indexes on `g` to generate
+ */
+
+import { asyncTake } from './asyncTake'
+import { asyncDrop } from './asyncDrop'
+import { asyncStep as stepF } from './asyncStep'
+import { asyncPipe } from './asyncPipe'
+
+export function asyncSlice<T, TReturn = any, TNext = any> (start: number = 0, end: number = Infinity, step: number = 1, returnValue?: TReturn): (_: AsyncGenerator<T, TReturn, TNext>) => AsyncGenerator<T, TReturn, TNext> {
+  return asyncPipe(asyncDrop(start), asyncTake(end - start), stepF(step, returnValue))
+}

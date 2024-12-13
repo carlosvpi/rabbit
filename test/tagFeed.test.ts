@@ -2,7 +2,7 @@ import {describe, expect, test} from '@jest/globals';
 import { tagFeed } from '../src/tagFeed';
 import { range } from '../src/range';
 import { feed } from '../src/feed';
-import { head } from '../src/head';
+import { take } from '../src/take';
 import { feedMap } from '../src/feedMap';
 import { yieldReturnValue } from '../src/yieldReturnValue';
 
@@ -25,7 +25,7 @@ describe('tagFeed', () => {
     ]);
   });
   test('should return [returnValue, next]', () => {
-    const g = yieldReturnValue(tagFeed(head(5, 100)(feedMap((x: number) => x * 2, 0))))
+    const g = yieldReturnValue(tagFeed(take(5, 100)(feedMap((x: number) => x * 2, 0))))
     const result = feed(range(0, 10))(g)
     expect([...result]).toEqual([
       [ 0, undefined ],

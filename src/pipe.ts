@@ -1,7 +1,7 @@
 /**
  * `pipe(...c)(g)` generates items of `g` and passes them through the generator constructors `c_i`
  * 
- * **Example** `pipe(skip(5), head(10), filter(x => x % 2 === 0))(range())` generates 6, 8, 10, 12, 14
+ * **Example** `pipe(drop(5), take(10), filter(x => x % 2 === 0))(range())` generates 6, 8, 10, 12, 14
  * @param {Array} [constructors] The generator constructors
  */
 

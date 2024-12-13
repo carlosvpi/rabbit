@@ -5,7 +5,7 @@
  * 
  * The return value of `g1` is ignored. The return value of `prepend(g1)(g2)` is that of `g2`.
  * 
- * @param {generator} [g1] the generator to prepend
+ * @param {generator} [object] the generator to prepend
  */
 
 export function prepend<T, TReturn = any, TNext = any> (object: Generator<T, TReturn, TNext>) {

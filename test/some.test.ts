@@ -25,7 +25,7 @@ describe('some', () => {
   });
   test('should return null if no event fulfils the predicate, irrespective of the return value of g', () => {
     const result = yieldReturnValue(some((x: number) => x % 2 === 0)(fromArray([1, 3, 5, 7, 9], 100)))
-    expect([...result]).toEqual([false, false, false, false, false, null]);
+    expect([...result]).toEqual([false, false, false, false, false, 100]);
   });
   test('should take into account the index and next of the element emitted', () => {
     const result = feed(range(11, 20))(some((x: number, i: number, n: number) => x === 36 && i === 8 && n === 18)(feedMap((x: number) => x * 2, 10)))

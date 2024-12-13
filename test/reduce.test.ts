@@ -3,7 +3,7 @@ import { reduce } from '../src/reduce';
 import { range } from '../src/range';
 import { feed } from '../src/feed';
 import { feedMap } from '../src/feedMap';
-import { head } from '../src/head';
+import { take } from '../src/take';
 import { pipe } from '../src/pipe';
 import { yieldReturnValue } from '../src/yieldReturnValue';
 
@@ -20,7 +20,7 @@ describe('reduce', () => {
     const result = pipe(
       reduce((acc: number, x: number) => acc + x, 100),
       feed(range(1)),
-      head(10)
+      take(10)
     )(feedMap((x: number) => x * 2, 0))
     expect([...result]).toEqual([100, 102, 106, 112, 120, 130, 142, 156, 172, 190]);
   });

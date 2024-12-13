@@ -3,7 +3,7 @@ import { chunks } from '../src/chunks';
 import { range } from '../src/range';
 import { yieldReturnValue } from '../src/yieldReturnValue';
 import { feed } from '../src/feed';
-import { head } from '../src/head';
+import { take } from '../src/take';
 import { feedMap } from '../src/feedMap';
 
 describe('chunks', () => {
@@ -20,7 +20,7 @@ describe('chunks', () => {
     expect([...result]).toEqual([[0], [1], [2], [3], [4]]);
   });
   test('should pass down the `next` value for every chunk', () => {
-    const result = head(4)(feed(range(1))(chunks(3)(feedMap((x: number) => x * 2, 0))))
+    const result = take(4)(feed(range(1))(chunks(3)(feedMap((x: number) => x * 2, 0))))
     expect([...result]).toEqual([[0, NaN, NaN], [2, 2, 2], [4, 4, 4], [6, 6, 6]]);
   });
   test('should return the same as g', () => {

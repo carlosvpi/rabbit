@@ -6,8 +6,7 @@ import { feed } from '../src/feed';
 import { pipe } from '../src/pipe';
 import { returning } from '../src/returning';
 import { yieldReturnValue } from '../src/yieldReturnValue';
-import { head } from '../src/head';
-import { tap } from '../src/tap';
+import { take } from '../src/take';
 
 describe('filter', () => {
   test('should filter the odd elements', () => {
@@ -29,7 +28,7 @@ describe('filter', () => {
   });
   test('should return the same value as the generator', () => {
     const result = pipe<number>(
-      head(10),
+      take(10),
       feed(range(1, 10)),
       filter((x: number) => x % 2 === 0),
       returning(101),

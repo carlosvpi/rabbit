@@ -10,7 +10,7 @@
  */
 
 export function sortInsert<T, TReturn = any, TNext = any> (item: T, sort: (_0: T, _1: T) => number) {
-  return function* (g: Generator<T, TReturn, TNext>): Generator<T, TReturn, TNext> {
+  return  function* (g: Generator<T, TReturn, TNext>): Generator<T, TReturn, TNext> {
     let next: TNext
     let previousNext: TNext
     let iterator: IteratorResult<T>
