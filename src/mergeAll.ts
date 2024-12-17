@@ -15,36 +15,36 @@
 
 export async function* mergeAll<T, TReturn = any, TNext = any> (...gs: AsyncGenerator<T, TReturn, TNext>[]): AsyncGenerator<T, TReturn, TNext> {
   let iterator: IteratorResult<T, TReturn>
+  let iterators: IteratorResult<T, TReturn>[] = []
   let next: TNext
   let returnValue: TReturn[] = []
-  let iterators: IteratorResult<T, TReturn>[] = []
-  const finishedObservables: Set<AsyncGenerator<T, TReturn, TNext>> = new Set([])
-  function listen(): Promise<IteratorResult<T,TReturn>> {
-    return new Promise(resolve => {
-      let resolved: boolean = false
+  let resolver: (value: IteratorResult<T, TReturn> | PromiseLike<IteratorResult<T, TReturn>>) => void
+  let freeResolver: boolean = true
+  const freeGenerators = new Set<AsyncGenerator<T, TReturn, TNext>>(gs)
+  while (returnValue.length < gs.length) {
+    iterator = await new Promise(resolve => {
+      resolver = resolve
+      freeResolver = true
       if (iterators.length) {
-        resolve(iterators.splice(0, 1)[0])
+        resolver(iterators.splice(0, 1)[0])
         return
       }
-      gs.forEach(async (g, i) => {
-        if (finishedObservables.has(g)) return
+      gs.forEach(async (g) => {
+        if (!freeGenerators.has(g)) return
+        freeGenerators.delete(g)
         iterators.push(await g.next(next))
-        if(resolved) return
-        resolved = true
-        const iteratorResult = iterators.splice(0, 1)[0]
-        if (iteratorResult.done) {
-          finishedObservables.add(g)
+        if (!iterators.at(-1).done) freeGenerators.add(g)
+        if (freeResolver) {
+          resolver(iterators.splice(0, 1)[0] as IteratorResult<T>)
+          freeResolver = false
         }
-        resolve(iteratorResult as IteratorResult<T>)
       })
     })
-  }
-  while (returnValue.length < gs.length) {
-    while (!(iterator = await listen()).done) {
+    if (iterator.done) {
+      returnValue.push(iterator.value as TReturn)
+    } else {
       next = yield iterator.value as T
     }
-    returnValue.push(iterator.value as TReturn)
   }
-
   return returnValue as TReturn
 }

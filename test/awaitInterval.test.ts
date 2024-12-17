@@ -12,7 +12,7 @@ describe('awaitInterval', () => {
     const diffs: number[] = await asyncToArray(result)
     expect(diffs.every((diff: number) => diff < 20)).toBe(true)
   });
-  test('should awaitInterval 5 elements to our generator', async () => {
+  test('should awaitInterval 5 elements to our generator and return what is passed to "stop"', async () => {
     const result = await asyncReturns(awaitInterval(10, (stop, _, i) => {i === 10 && stop(100)}))
     expect(result).toBe(100)
   });

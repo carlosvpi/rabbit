@@ -17,19 +17,21 @@ export async function* mergeRace<T, TReturn = any, TNext = any> (...gs: AsyncGen
   let iterator: IteratorResult<T, TReturn>
   let next: TNext
   let iterators: IteratorResult<T, TReturn>[] = []
+  let resolver: (value: IteratorResult<T, TReturn> | PromiseLike<IteratorResult<T, TReturn>>) => void
   function listen(): Promise<IteratorResult<T,TReturn>> {
     return new Promise(resolve => {
-      let resolved: boolean = false
+      resolver = resolve
       if (iterators.length) {
-        resolve(iterators.pop())
+        resolver(iterators.splice(0, 1)[0])
         return
       }
+      let resolved: boolean = false
       gs.forEach(async (g) => {
         iterators.push(await g.next(next))
         if(resolved) return
         resolved = true
-        const iteratorResult = iterators.pop()
-        resolve(iteratorResult as IteratorResult<T>)
+        const iteratorResult = iterators.splice(0, 1)[0]
+        resolver(iteratorResult as IteratorResult<T>)
       })
     })
   }

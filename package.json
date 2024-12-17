@@ -1,13 +1,13 @@
 {
   "name": "@carlosvpi/rabbit",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Utility javascript library for generators",
-  "main": "index.js",
+  "main": "./dist/index.js",
   "files": [
     "/dist"
   ],
   "exports": {
-    "./.": "./dist/index.js",
+    ".": "./dist/index.js",
     "./append": "./dist/src/append.js",
     "./asyncAppend": "./dist/src/asyncAppend.js",
     "./asyncChunks": "./dist/src/asyncChunks.js",
@@ -41,6 +41,7 @@
     "./asyncTransposeRace": "./dist/src/asyncTransposeRace.js",
     "./asyncTryCatch": "./dist/src/asyncTryCatch.js",
     "./asyncYieldReturnValue": "./dist/src/asyncYieldReturnValue.js",
+    "./awaitCall": "./dist/src/awaitCall.js",
     "./awaitEvent": "./dist/src/awaitEvent.js",
     "./awaitInterval": "./dist/src/awaitInterval.js",
     "./awaitPromise": "./dist/src/awaitPromise.js",
@@ -56,6 +57,10 @@
     "./find": "./dist/src/find.js",
     "./flatMap": "./dist/src/flatMap.js",
     "./fromArray": "./dist/src/fromArray.js",
+    "./fromNowMulticast": "./dist/src/fromNowMulticast.js",
+    "./fromNowMulticastAsync": "./dist/src/fromNowMulticastAsync.js",
+    "./fromStartMulticast": "./dist/src/fromStartMulticast.js",
+    "./fromStartMulticastAsync": "./dist/src/fromStartMulticastAsync.js",
     "./last": "./dist/src/last.js",
     "./map": "./dist/src/map.js",
     "./mergeAll": "./dist/src/mergeAll.js",

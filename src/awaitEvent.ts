@@ -22,32 +22,44 @@ type EventListener<T> = (_0: string, _1: (_: T) => void, _2?: {}) => void
  */
 
 export async function* awaitEvent<T = any, TReturn = any, TNext = any> (
-  target: { addEventListener: EventListener<T>, removeEventListener: EventListener<T>},
+  target: { emit: (_:T) => void, addEventListener: EventListener<T>, removeEventListener: EventListener<T>},
   eventName: string,
-  options: {},
-  checkStop: (stop: (_?: TReturn) => void, _0?: T, _1?: number, _2?: TNext) => void = () => undefined
+  options: {} = {},
+  checkStop: (stop: (_: TReturn) => void, _0?: IteratorResult<T, TReturn>, _1?: number, _2?: TNext) => void = () => undefined
 ) {
   let next: TNext
   let i: number = 0
-  let returnValue: TReturn
-  let iterate: boolean = true
-  let item: T
-  let f: (_: T, _1: number, _2: TNext) => void
+  let iterator: IteratorResult<T, TReturn>
+  let items: IteratorResult<T, TReturn>[] = []
+  let isPromiseFree: boolean = true
+  let f: (_: IteratorResult<T, TReturn>) => void
   const stop = (result: TReturn) => {
-    iterate = false
-    returnValue = result
+    if (items.at(-1)?.done) return
+    items.push({ value: result, done: true })
   }
-  const handler = (evt: any) => {
-    f(evt, i++, next)
+  const handler = (value: T) => {
+    if (!items.at(-1)?.done) {
+      items.push({ value, done: false })
+    }
+    checkStop(stop, iterator, i++, next)
+    if (isPromiseFree) {
+      f(items.splice(0, 1)[0])
+      isPromiseFree = false
+    }
   }
   target.addEventListener(eventName, handler, options)
-  checkStop(stop, item, i, next)
-  while(iterate) {
-    next = yield item = await new Promise(r => {
+  checkStop(stop, iterator, i, next)
+  while(!(iterator = await new Promise<IteratorResult<T, TReturn>>(r => {
+    if (items.length) {
+      r(items.splice(0, 1)[0])
+    } else {
       f = r
-    })
-    checkStop(stop, item, i, next)
+      isPromiseFree = true
+    }
+  })).done) {
+    next = yield Promise.resolve(iterator.value)
+    checkStop(stop, iterator, i, next)
   }
   target.removeEventListener(eventName, handler)
-  return returnValue
+  return iterator.value
 }

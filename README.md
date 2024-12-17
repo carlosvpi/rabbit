@@ -64,7 +64,20 @@ or
 yarn add @carlosvpi/rabbit
 ```
 
-@carlosvpi/rabbit is ready to be tree-shaken. In order to only use a specific function (for example, `take`), you can import like so:
+Importing:
+
+```typescript
+import { take } from '@carlosvpi/rabbit'
+```
+
+@carlosvpi/rabbit is ready to be tree-shaken. Make sure `tsconfig.json` contains in `compilerOptions` the following:
+
+```json
+  "module": "node16",
+  "moduleResolution": "node16"
+```
+
+Then you can import rabbit's methods like so:
 
 ```typescript
 import { take } from '@carlosvpi/rabbit/take'
