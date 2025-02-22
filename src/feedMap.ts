@@ -11,9 +11,10 @@
  * @param {generator} [first] the first element to generate
  */
 
-export function* feedMap<T, TNext = T> (f: (_: TNext) => T, first: TNext): Generator<T, never, TNext> {
-  let param: TNext = yield f(first)
+export function* feedMap<T, TNext = T> (f: (_0: TNext, _1: number) => T, first: TNext): Generator<T, never, TNext> {
+  let i: number = 0
+  let next: TNext = yield f(first, i++)
   while (true) {
-    param = yield f(param)
+    next = yield f(next, i++)
   }
 }

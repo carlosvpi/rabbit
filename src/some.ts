@@ -1,3 +1,33 @@
+function asyncSome<T, TReturn = any, TNext = any> (p: (_0: T, _1: number, _2: TNext) => boolean) {
+  return async function* (g: AsyncGenerator<T, TReturn, TNext>): AsyncGenerator<boolean, T | TReturn, TNext> {
+    let i = 0
+    let iterator: IteratorResult<T, TReturn>
+    let next: TNext
+    let value: boolean = false
+    while(!(iterator = await g.next(next)).done) {
+      value ||= p(iterator.value as T, i++, next)
+      next = yield value
+      if (value) return iterator.value as T
+    }
+    return iterator.value as TReturn
+  }
+}
+
+function syncSome<T, TReturn = any, TNext = any> (p: (_0: T, _1: number, _2: TNext) => boolean) {
+  return function* (g: Generator<T, TReturn, TNext>): Generator<boolean, T | TReturn, TNext> {
+    let i = 0
+    let iterator: IteratorResult<T, TReturn>
+    let next: TNext
+    let value: boolean = false
+    while(!(iterator = g.next(next)).done) {
+      value ||= p(iterator.value as T, i++, next)
+      next = yield value
+      if (value) return iterator.value as T
+    }
+    return iterator.value as TReturn
+  }
+}
+
 /**
  * 
  * `some(p)(g)` generates false until an element of `g` satisfies a predicate, in which case it generates true.
@@ -11,16 +41,12 @@
  */
 
 export function some<T, TReturn = any, TNext = any> (p: (_0: T, _1: number, _2: TNext) => boolean) {
-  return function* (g: Generator<T, TReturn, TNext>): Generator<boolean, T | TReturn, TNext> {
-    let i = 0
-    let iterator: IteratorResult<T, TReturn>
-    let next: TNext
-    let value: boolean = false
-    while(!(iterator = g.next(next)).done) {
-      value ||= p(iterator.value as T, i++, next)
-      next = yield value
-      if (value) return iterator.value as T
+  const asyncFunctor = asyncSome(p)
+  const syncFunctor = syncSome(p)
+  return function<G extends Generator<T, TReturn, TNext> | AsyncGenerator<T, TReturn, TNext>> (g: G): G {
+    if (g[Symbol.asyncIterator]) {
+      return asyncFunctor(g as AsyncGenerator<T, TReturn, TNext>) as G;
     }
-    return iterator.value as TReturn
+    return syncFunctor(g as Generator<T, TReturn, TNext>) as G;
   }
 }

@@ -4,6 +4,8 @@
  * 
  * `checkStop` is a function that receives `stop`, the last item generated, its index and the `next` value passed to it. When this function calls `stop` with any value `v`, `awaitEvent` removes the event listener and returns `v`.
  * 
+ * @template TReturn The type of the return value of the generators.
+ * @template TNext The type of the value that can be passed to the generators' `next` method.
  * @param ms interval milliseconds 
  * @param checkStop function called on every item to check if the interval should stop
  * @returns the asynchronous generator

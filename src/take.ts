@@ -1,3 +1,31 @@
+function asyncTake<T, TReturn = any, TNext = any> (n: number = 1, returnValue?: TReturn) {
+  return async function* (g: AsyncGenerator<T, TReturn, TNext>): AsyncGenerator<T, TReturn, TNext> {
+    let next: TNext
+    let i: IteratorResult<T, TReturn>
+    while (n-- && !(i = await g.next(next)).done) {
+      next = yield i.value as T
+    }
+    if (i.done) {
+      return i.value
+    }
+    return returnValue
+  }
+}
+
+function syncTake<T, TReturn = any, TNext = any> (n: number = 1, returnValue?: TReturn) {
+  return function* (g: Generator<T, TReturn, TNext>): Generator<T, TReturn, TNext> {
+    let next: TNext
+    let i: IteratorResult<T, TReturn>
+    while (n-- && !(i = g.next(next)).done) {
+      next = yield i.value as T
+    }
+    if (i.done) {
+      return i.value
+    }
+    return returnValue
+  }
+}
+
 /**
  * `take(n)(g)` generates the first `n` (**default** 1) items of `g`
  * 
@@ -9,15 +37,12 @@
  */
 
 export function take<T, TReturn = any, TNext = any> (n: number = 1, returnValue?: TReturn) {
-  return function* (g: Generator<T, TReturn, TNext>): Generator<T, TReturn, TNext> {
-    let next: TNext
-    let i: IteratorResult<T, TReturn>
-    while (n-- && !(i = g.next(next)).done) {
-      next = yield i.value as T
+  const asyncFunctor = asyncTake(n, returnValue)
+  const syncFunctor = syncTake(n, returnValue)
+  return function<G extends Generator<T, TReturn, TNext> | AsyncGenerator<T, TReturn, TNext>> (g: G): G {
+    if (g[Symbol.asyncIterator]) {
+      return asyncFunctor(g as AsyncGenerator<T, any, TNext>) as G;
     }
-    if (i.done) {
-      return i.value
-    }
-    return returnValue
+    return syncFunctor(g as Generator<T, any, TNext>) as G;
   }
 }

@@ -16,6 +16,14 @@ import { drop } from './drop'
 import { step as stepF } from './step'
 import { pipe } from './pipe'
 
-export function slice<T, TReturn = any, TNext = any> (start: number = 0, end: number = Infinity, step: number = 1, returnValue?: TReturn): (_: Generator<T, TReturn, TNext>) => Generator<T, TReturn, TNext> {
-  return pipe(drop(start), take(end - start), stepF(step, returnValue))
+export function slice<T, TReturn = any, TNext = any> (start: number = 0, end: number = Infinity, step: number = 1, returnValue?: TReturn) {
+  function functor (g: AsyncGenerator<T, TReturn, TNext>): AsyncGenerator<T, TReturn, TNext>
+  function functor (g: Generator<T, TReturn, TNext>): Generator<T, TReturn, TNext>
+  function functor (g: Generator<T, TReturn, TNext> | AsyncGenerator<T, TReturn, TNext>): Generator<T, TReturn, TNext> | AsyncGenerator<T, TReturn, TNext> {
+    if (g[Symbol.asyncIterator]) {
+      return pipe<T, TReturn, TNext>(drop(start) as (_: AsyncGenerator<T, TReturn, TNext>) => AsyncGenerator<T, TReturn, TNext>, take(end - start), stepF(step, returnValue))(g as AsyncGenerator<T, TReturn, TNext>) as AsyncGenerator<T, TReturn, TNext>
+    }
+    return pipe<T, TReturn, TNext>(drop(start), take(end - start), stepF(step, returnValue))(g as Generator<T, TReturn, TNext>) as Generator<T, TReturn, TNext>
+  }
+  return functor
 }

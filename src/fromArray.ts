@@ -1,10 +1,14 @@
 /**
- * `fromArray(array)` generates the items of `array`
+ * Yield the items of an array
  * 
- * Optionally `fromArray(array, value)` returns `value`
+ * Return the second argument
  * 
- * **Example** `fromArray([0, 1, 2, 3, 4])` generates 0, 1, 2, 3, 4
- * @param {array} [array] the array
+ * @example `fromArray([0, 1, 2, 3, 4], 100)` generates 0, 1, 2, 3, 4 and returns 100
+ * @template T The type of values yielded by the generators
+ * @template TReturn The type of the return value of the generators
+ * @param array the array to yield
+ * @param returnValue the value to return
+ * @returns the generator
  */
 
 export function* fromArray<T, TReturn = any>(array: T[], returnValue?: TReturn): Generator<T, TReturn, void> {

@@ -1,3 +1,31 @@
+function asyncStep<T, TReturn = any, TNext = any> (distance: number = 1, returnValue?: TReturn) {
+  return async function* (g: AsyncGenerator<T, TReturn, TNext>): AsyncGenerator<T, TReturn, TNext> {
+    let next: TNext
+    let iterator: IteratorResult<T, TReturn>
+    let current = 1
+    while (!(iterator = await g.next(next)).done) {
+      if (--current) continue
+      current = distance
+      next = yield iterator.value as T
+    }
+    return returnValue ?? iterator.value
+  }
+}
+
+function syncStep<T, TReturn = any, TNext = any> (distance: number = 1, returnValue?: TReturn) {
+  return function* (g: Generator<T, TReturn, TNext>): Generator<T, TReturn, TNext> {
+    let next: TNext
+    let iterator: IteratorResult<T, TReturn>
+    let current = 1
+    while (!(iterator = g.next(next)).done) {
+      if (--current) continue
+      current = distance
+      next = yield iterator.value as T
+    }
+    return returnValue ?? iterator.value
+  }
+}
+
 /**
  * `step(distance)(g)` gets the elements of `g` separated `distance` items between each.
  * 
@@ -9,15 +37,12 @@
  */
 
 export function step<T, TReturn = any, TNext = any> (distance: number = 1, returnValue?: TReturn) {
-  return function* (g: Generator<T, TReturn, TNext>): Generator<T, TReturn, TNext> {
-    let next: TNext
-    let iterator: IteratorResult<T, TReturn>
-    let current = 1
-    while (!(iterator = g.next(next)).done) {
-      if (--current) continue
-      current = distance
-      next = yield iterator.value as T
+  const asyncFunctor = asyncStep(distance, returnValue)
+  const syncFunctor = syncStep(distance, returnValue)
+  return function<G extends Generator<T, TReturn, TNext> | AsyncGenerator<T, TReturn, TNext>> (g: G): G {
+    if (g[Symbol.asyncIterator]) {
+      return asyncFunctor(g as AsyncGenerator<T, any, TNext>) as G;
     }
-    return returnValue ?? iterator.value
+    return syncFunctor(g as Generator<T, any, TNext>) as G;
   }
 }

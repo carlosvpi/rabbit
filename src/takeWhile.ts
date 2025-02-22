@@ -1,3 +1,31 @@
+function asyncTakeWhile<T, TReturn = any, TNext = any> (p: (_0: T, _1: number, _2: TNext) => boolean, returnValue?: TReturn) {
+  return async function* (g: AsyncGenerator<T, TReturn, TNext>): AsyncGenerator<T, TReturn, TNext> {
+    let i = 0
+    let next: TNext
+    let iterator: IteratorResult<T, TReturn>
+    while(!(iterator = await g.next(next)).done) {
+      if (!p(iterator.value as T, i++, next)) return returnValue
+      next = yield iterator.value as T
+    }
+    if (iterator.done) return iterator.value
+    return returnValue
+  }
+}
+
+function syncTakeWhile<T, TReturn = any, TNext = any> (p: (_0: T, _1: number, _2: TNext) => boolean, returnValue?: TReturn) {
+  return function* (g: Generator<T, TReturn, TNext>): Generator<T, TReturn, TNext> {
+    let i = 0
+    let next: TNext
+    let iterator: IteratorResult<T, TReturn>
+    while(!(iterator = g.next(next)).done) {
+      if (!p(iterator.value as T, i++, next)) return returnValue
+      next = yield iterator.value as T
+    }
+    if (iterator.done) return iterator.value
+    return returnValue
+  }
+}
+
 /**
  * `takeWhile(p)(g)` generates items `e` of `g` as long `p(e, index, next)` holds (`index` is the index of `e` in `g` and `next` is the next value used to generate it)
  * 
@@ -9,15 +37,12 @@
  */
 
 export function takeWhile<T, TReturn = any, TNext = any> (p: (_0: T, _1: number, _2: TNext) => boolean, returnValue?: TReturn) {
-  return function* (g: Generator<T, TReturn, TNext>): Generator<T, TReturn, TNext> {
-    let i = 0
-    let next: TNext
-    let iterator: IteratorResult<T, TReturn>
-    while(!(iterator = g.next(next)).done) {
-      if (!p(iterator.value as T, i++, next)) return returnValue
-      next = yield iterator.value as T
+  const asyncFunctor = asyncTakeWhile(p, returnValue)
+  const syncFunctor = syncTakeWhile(p, returnValue)
+  return function<G extends Generator<T, TReturn, TNext> | AsyncGenerator<T, TReturn, TNext>> (g: G): G {
+    if (g[Symbol.asyncIterator]) {
+      return asyncFunctor(g as AsyncGenerator<T, any, TNext>) as G;
     }
-    if (iterator.done) return iterator.value
-    return returnValue
+    return syncFunctor(g as Generator<T, any, TNext>) as G;
   }
 }

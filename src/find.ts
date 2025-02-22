@@ -1,3 +1,27 @@
+function asyncFind<T, TNext> (p: (_0: T, _1: number, _2: TNext) => boolean) {
+  return async function (g: AsyncGenerator<T, any, TNext>): Promise<T | null> {
+    let i = 0
+    let iterator: IteratorResult<T>
+    let next: TNext
+    while (!(iterator = await g.next(next)).done) {
+      if (p(iterator.value, i++, next)) return iterator.value
+    }
+    return null
+  }
+}
+
+function syncFind<T, TNext> (p: (_0: T, _1: number, _2: TNext) => boolean) {
+  return function (g: Generator<T, any, TNext>): T | null {
+    let i = 0
+    let iterator: IteratorResult<T>
+    let next: TNext
+    while (!(iterator = g.next(next)).done) {
+      if (p(iterator.value, i++, next)) return iterator.value
+    }
+    return null
+  }
+}
+
 /**
  * `find(p)(g)` finds the item in `g` that fulfils `p` (if none does, returns `null`)
  * 
@@ -10,13 +34,15 @@
  */
 
 export function find<T, TNext> (p: (_0: T, _1: number, _2: TNext) => boolean) {
-  return function (g: Generator<T, any, TNext>): T | null {
-    let i = 0
-    let iterator: IteratorResult<T>
-    let next: TNext
-    while (!(iterator = g.next(next)).done) {
-      if (p(iterator.value, i++, next)) return iterator.value
+  const asyncFunctor = asyncFind(p)
+  const syncFunctor = syncFind(p)
+  function functor(g: AsyncGenerator<T, any, TNext>): Promise<T | null>;
+  function functor(g: Generator<T, any, TNext>): T | null;
+  function functor (g: Generator<T, any, TNext> | AsyncGenerator<T, any, TNext>): Promise<T | null> | T | null {
+    if (g[Symbol.asyncIterator]) {
+      return asyncFunctor(g as AsyncGenerator<T, any, TNext>) as Promise<T | null>;
     }
-    return null
+    return syncFunctor(g as Generator<T, any, TNext>) as T | null;
   }
+  return functor
 }

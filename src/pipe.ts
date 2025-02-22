@@ -5,11 +5,14 @@
  * @param {Array} [constructors] The generator constructors
  */
 
-export function pipe<T>(...constructors: ((_: Generator<T>) => Generator<T>)[]) {
-  return function(generator: Generator<T>) {
+export function pipe<T, TReturn = any, TNext = any>(...constructors: ((_: Generator<T, TReturn, TNext>) => Generator<T, TReturn, TNext>)[]): (g: Generator<T, TReturn, TNext>) => Generator<T, TReturn, TNext>
+export function pipe<T, TReturn = any, TNext = any>(...constructors: ((_: AsyncGenerator<T, TReturn, TNext>) => AsyncGenerator<T, TReturn, TNext>)[]): (g: AsyncGenerator<T, TReturn, TNext>) => AsyncGenerator<T, TReturn, TNext>
+
+export function pipe<T, TReturn = any, TNext = any>(...constructors: ((_: any) => any)[]) {
+  return function(g: any): any {
     for (let constructor of constructors) {
-      generator = constructor(generator)
+      g = constructor(g)
     }
-    return generator
+    return g
   }
 }

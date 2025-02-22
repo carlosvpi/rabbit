@@ -1,17 +1,28 @@
+export type Caller<T, TReturn = any, TNext = any> = [
+  AsyncGenerator<T, TReturn, TNext>,
+  (value: T) => Promise<TNext>,
+  (result: TReturn) => void
+]
+
 /**
  * 
- * `awaitCall(caller)` exposes as parameters of `caller` two functions: `push` and `stop`.
+ * Use "push(value)" to make the async generator yield a value.
  * 
- * `push(value)` pushes `value` to the async generator created by `awaitCall(caller)`, and returns a promise resolved with the `next` value used to generate the next one.
+ * Use "stop(value)" to make the async generator return a value.
  * 
- * `stop(value)` finishes `awaitCall(caller)` making it return `value`.
+ * "push(value)" returns a promise resolved with the value used to generate the next one.
  * 
- * @param caller function passed "next" and "stop"
+ * @example `awaitCall(([g, push, stop]) => {push(1); push(2); stop(3)})` 
+ * @example `const [g, push, stop] = new Promise(awaitCall); push(1); push(2); stop(3)`
+ * @template T The type of values yielded by the generators.
+ * @template TReturn The type of the return value of the generators.
+ * @template TNext The type of the value that can be passed to the generators' `next` method.
+ * @param caller function passed "generator", "push" and "stop"
  * @returns the asynchronous generator
  */
 
-export async function* awaitCall<T = any, TReturn = any, TNext = any> (
-  caller: (push: (_: T) => Promise<TNext>, stop: (_: TReturn) => void) => void
+export function awaitCall<T = any, TReturn = any, TNext = any> (
+  caller: (_: Caller<T, TReturn, TNext>) => void
 ): AsyncGenerator<T, TReturn, TNext> {
   let next: TNext
   let returnValue: TReturn
@@ -19,24 +30,38 @@ export async function* awaitCall<T = any, TReturn = any, TNext = any> (
   let resolver: (value: T | TReturn) => void
   let lastPush: ((value: TNext) => void)[] = []
   let items: (T | TReturn)[] = []
-  caller((value: T): Promise<TNext> => {
-    items.push(value)
-    if (resolver) resolver(items.splice(0, 1)[0])
-    return new Promise<TNext>(resolve => lastPush.push((v)=>resolve(v)))
-  }, (result: TReturn) => {
-    iterate = false
-    returnValue = result
-    if (resolver) resolver(result)
-  })
-  while(iterate) {
-    const item = await new Promise<T|TReturn>(resolve => {
-      if (items.length) {
-        resolve(items.splice(0, 1)[0])
-        return
+  const g = (async function* () {
+    while(iterate) {
+      const item = await new Promise<T|TReturn>(resolve => {
+        if (items.length) {
+          resolve(items.splice(0, 1)[0])
+          return
+        }
+        resolver = resolve
+      })
+      if (lastPush.length) lastPush.splice(0, 1)[0](next = yield item as T)
+    }
+    while (items.length) {
+      lastPush.splice(0, 1)[0](next = yield items.splice(0, 1)[0] as T)
+    }
+    return returnValue
+  })()
+  caller([
+    g,
+    (value: T): Promise<TNext> => {
+      if (!iterate) return Promise.resolve(null)
+      items.push(value)
+      if (resolver) {
+        resolver(items.splice(0, 1)[0])
+        resolver = null
       }
-      resolver = resolve
-    })
-    if (iterate) lastPush.splice(0, 1)[0](next = yield item as T)
-  }
-  return returnValue
+      return new Promise<TNext>(resolve => lastPush.push((v)=>resolve(v)))
+    },
+    (result: TReturn) => {
+      iterate = false
+      returnValue = result
+      if (resolver) resolver(result)
+    }
+  ])
+  return g
 }

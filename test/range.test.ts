@@ -2,6 +2,10 @@ import {describe, expect, test} from '@jest/globals';
 import { range } from '../src/range';
 
 describe('range', () => {
+  test('should produce nothing', () => {
+    const result = range(0, 0)
+    expect([...result]).toEqual([]);
+  });
   test('should produce numbers from 0 to 10 (excluded)', () => {
     const result = range(0, 10)
     expect([...result]).toEqual([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);

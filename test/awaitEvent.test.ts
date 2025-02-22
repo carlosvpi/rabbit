@@ -1,7 +1,7 @@
 import {describe, expect, test} from '@jest/globals';
 import { awaitEvent } from '../src/awaitEvent';
-import { asyncToArray } from '../src/asyncToArray';
-import { asyncYieldReturnValue } from '../src/asyncYieldReturnValue';
+import { toArray } from '../src/toArray';
+import { yieldReturnValue } from '../src/yieldReturnValue';
 
 describe('awaitEvent', () => {
   const target = {
@@ -29,7 +29,7 @@ describe('awaitEvent', () => {
       target.emit(13)
       target.emit(14)
     }, 0)
-    expect(await asyncToArray(asyncYieldReturnValue(result))).toEqual([1, 4, 8, 3, 7, 9, 'End']);
+    expect(await toArray(yieldReturnValue(result))).toEqual([1, 4, 8, 3, 7, 9, 'End']);
   });
   test('should emit 5 events and end with "Finish", asynchronously', async () => {
     let s
@@ -53,7 +53,7 @@ describe('awaitEvent', () => {
       target.emit(13)
       await wait(100, null)
     })()
-    expect(await asyncToArray(asyncYieldReturnValue(result))).toEqual([1, 8, 4, 3, 7, 'Finish'])
+    expect(await toArray(yieldReturnValue(result))).toEqual([1, 8, 4, 3, 7, 'Finish'])
   });
   test('should return before start', () => {
     const result = awaitEvent(target, 'eventName', stop => stop('Finish'))
@@ -66,7 +66,7 @@ describe('awaitEvent', () => {
       target.emit(9)
       target.emit(13)
       target.emit(14)
-      expect(await asyncToArray(asyncYieldReturnValue(result))).toEqual(['Finish']);
+      expect(await toArray(yieldReturnValue(result))).toEqual(['Finish']);
     }, 0)
   });
 });
