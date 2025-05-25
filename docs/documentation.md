@@ -1,3 +1,5 @@
+# Rabbit
+
 ## Notation
 
 A generator that produces values `1`, `2` and `3`, should not be represented as `[1, 2, 3]`, as that represents, instead, an array. In order to represent the generator, this document follows the notation `«1, 2, 3»`.

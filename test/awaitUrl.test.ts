@@ -1,9 +1,9 @@
 import {describe, expect, test} from '@jest/globals';
-import { awaitEvent } from '../src/awaitEvent';
+import { awaitUrl } from '../src/awaitUrl';
 import { toArray } from '../src/toArray';
 import { yieldReturnValue } from '../src/yieldReturnValue';
 
-describe('awaitEvent', () => {
+describe('awaitUrl', () => {
   const target = {
     listeners: new Set<(_: number) => void>([]),
     emit: (v: number) => {
@@ -18,7 +18,7 @@ describe('awaitEvent', () => {
   }
   const wait = (ms, v) => new Promise(r => setTimeout(() => r(v), ms))
   test('should emit 5 events and end with "Finish"', async () => {
-    const result = awaitEvent(target, 'eventName', {}, (stop, each) => {
+    const result = awaitUrl.call(target, (stop, each) => {
       each((_:number, i:number) => i === 5 && stop('End'))
     })
     setTimeout(() => {
@@ -35,7 +35,7 @@ describe('awaitEvent', () => {
   });
   test('should emit 5 events and end with "Finish", asynchronously', async () => {
     let s
-    const result = awaitEvent(target, 'eventName', {}, stop => {s = stop})
+    const result = awaitUrl.call(target, stop => {s = stop})
     ;(async () => {
       await wait(100, null)
       target.emit(1)
@@ -58,7 +58,7 @@ describe('awaitEvent', () => {
     expect(await toArray(yieldReturnValue(result))).toEqual([1, 8, 4, 3, 7, 'Finish'])
   });
   test('should return before start', () => {
-    const result = awaitEvent(target, 'eventName', stop => stop('Finish'))
+    const result = awaitUrl.call(target, stop => stop('Finish'))
     setTimeout(async () => {
       target.emit(1)
       target.emit(4)

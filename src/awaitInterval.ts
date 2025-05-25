@@ -11,9 +11,11 @@
  * @returns the asynchronous generator
  */
 
+import { CheckStop } from "./types"
+
 export async function* awaitInterval<TReturn = any, TNext = any> (
   ms: number,
-  checkStop: (stop: (_?: TReturn) => void, _0?: number, _1?: number, _2?: TNext) => void = () => undefined
+  checkStop: CheckStop<number, TReturn> = () => {}
 ): AsyncGenerator<number, TReturn, TNext> {
   let next: TNext
   let i: number = 0
@@ -21,19 +23,21 @@ export async function* awaitInterval<TReturn = any, TNext = any> (
   let iterate: boolean = true
   let item: number
   let f: (_: number, _1: number, _2: TNext) => void
-  const stop = (result: TReturn) => {
+  let currentEach
+  const stop = (result?: TReturn) => {
     iterate = false
     returnValue = result
   }
   const token = setInterval(() => {
-    f(Date.now(), i++, next)
+    const now = Date.now()
+    f(now, i++, next)
+    currentEach?.(now, i)
   }, ms)
-  checkStop(stop, item, i, next)
+  checkStop(stop, (each: (_1: number, _2: number) => void) => {currentEach = each})
   while(iterate) {
     next = yield item = await new Promise<number>(r => {
       f = r
     })
-    checkStop(stop, item, i, next)
   }
   clearInterval(token)
   return returnValue

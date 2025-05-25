@@ -1,17 +1,15 @@
 import { CheckStop } from "./types"
 
-type EventListener<T> = (_0: string, _1: (_: T) => void, _2?: {}) => void
-
 /**
- * `awaitEvent(target, eventName, options, checkStop)` adds an eventListener to the `target` and every time the event fires it is generated asynchronously by `awaitEvent`.
+ * `awaitUrl(target, eventName, options, checkStop)` emits on every change of URL hash.
  * 
- * `checkStop` is a function that receives `stop`, the last item generated, its index and the `next` value passed to it. When this function calls `stop` with any value `v`, `awaitEvent` removes the event listener and returns `v`.
+ * `checkStop` is a function that receives `stop`, the last item generated, its index and the `next` value passed to it. When this function calls `stop` with any value `v`, `awaitUrl` removes the event listener and returns `v`.
  * 
  * Emits every click event until the 10th one, when it returns `'end'`
  * 
  * @example
  * ```typescript
- * awaitEvent(button, 'click', {}, (stop, _, i) => i === 10 && stop('end')))
+ * awaitUrl(button, 'click', {}, (stop, _, i) => i === 10 && stop('end')))
  * ```
  * 
  * @template T The type of values yielded by the generators.
@@ -24,10 +22,7 @@ type EventListener<T> = (_0: string, _1: (_: T) => void, _2?: {}) => void
  * @returns the asynchronous generator
  */
 
-export async function* awaitEvent<T = any, TReturn = any, TNext = any> (
-  target: { emit: (_:T) => void, addEventListener: EventListener<T>, removeEventListener: EventListener<T>},
-  eventName: string,
-  options: {} = {},
+export async function* awaitUrl<T = any, TReturn = any, TNext = any> (
   checkStop: CheckStop<T, TReturn> = () => {}
 ) {
   let next: TNext
@@ -51,7 +46,7 @@ export async function* awaitEvent<T = any, TReturn = any, TNext = any> (
     }
     currentEach?.(value, i++)
   }
-  target.addEventListener(eventName, handler, options)
+  this.addEventListener('hashchange', handler)
   checkStop(stop, (each: (_1: T, _2: number) => void) => {currentEach = each})
   while(!(iterator = await new Promise<IteratorResult<T, TReturn>>(r => {
     if (items.length) {
@@ -63,6 +58,6 @@ export async function* awaitEvent<T = any, TReturn = any, TNext = any> (
   })).done) {
     next = yield Promise.resolve(iterator.value)
   }
-  target.removeEventListener(eventName, handler)
+  this.removeEventListener('hashchange', handler)
   return iterator.value
 }

@@ -14,23 +14,26 @@
  * @returns the asynchronous generator
  */
 
+import { CheckStop } from "./types"
+
 export async function* awaitPromise<T, TReturn = any, TNext = any> (
   promiseFactory: (_0: number, _1: TNext) => Promise<T>,
-  checkStop: (stop: (_?: TReturn) => void, _0?: T, _1?: number, _2?: TNext) => void = () => undefined
+  checkStop: CheckStop<T, TReturn> = () => {}
 ): AsyncGenerator<T, TReturn, TNext> {
   let next: TNext
   let i: number = 0
   let returnValue: TReturn
   let iterate: boolean = true
-  let item: T
+  let currentEach
   const stop = (result: TReturn) => {
     iterate = false
     returnValue = result
   }
-  checkStop(stop, item, i, next)
+  checkStop(stop, (each: (_1: T, _2: number) => void) => {currentEach = each})
   while(iterate) {
-    next = yield item = await promiseFactory(i++, next)
-    checkStop(stop, item, i, next)
+    const item = await promiseFactory(i++, next)
+    currentEach?.(item, i)
+    next = yield item
   }
   return returnValue
 }
